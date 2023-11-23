@@ -1,0 +1,16 @@
+{
+  "NODE_ENV": "NODE_ENV",
+  "SERVER": {
+    "PORT": "SERVER_PORT",
+    "URL": "SERVER_URL"
+  },
+  "CAPTCHA_CONFIG": {
+    "MIN_SIZE": "CAPTCHA_CONFIG_MIN_SIZE",
+    "MAX_SIZE": "CAPTCHA_CONFIG_MAX_SIZE"
+  },
+  "REDIS": {
+    "HOST": "REDIS_HOST",
+    "PORT": "REDIS_PORT",
+    "TTL": "REDIS_TTL"
+  }
+}
