@@ -1,0 +1,295 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/healthz": {
+      "get": {
+        "operationId": "api-captcha_AppController_healthz",
+        "summary": "Health check",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataHcRes"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Health check"
+        ]
+      }
+    },
+    "/api/v1/captcha": {
+      "post": {
+        "operationId": "api-captcha_CaptchaController_createChallenge",
+        "summary": "Create a captcha challenge",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DataCreateCaptchaChallenge"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataCaptchaChallengeRes"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Captcha challenge"
+        ]
+      }
+    },
+    "/api/v1/captcha/{captchaID}": {
+      "put": {
+        "operationId": "api-captcha_CaptchaController_verifyChallenge",
+        "summary": "Verify a captcha challenge",
+        "parameters": [
+          {
+            "name": "captchaID",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DataVerifyCaptchaChallenge"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataCaptchaVerificationRes"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFound"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Captcha challenge"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "api-captcha",
+    "description": "",
+    "version": "0.0.1-beta1",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [
+    {
+      "url": "http://127.0.0.1:8080"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "DataHcRes": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "string",
+            "nullable": false,
+            "description": "API version",
+            "example": "0.0.1-beta1"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "InternalServerError": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "number",
+            "enum": [
+              500
+            ]
+          },
+          "message": {
+            "type": "string",
+            "description": "Internal server error",
+            "enum": [
+              "Internal server error"
+            ]
+          }
+        },
+        "required": [
+          "statusCode",
+          "message"
+        ]
+      },
+      "CreateCaptchaChallengeDto": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "type": "number",
+            "minimum": 4,
+            "maximum": 8
+          },
+          "width": {
+            "type": "number"
+          },
+          "height": {
+            "type": "number"
+          }
+        }
+      },
+      "DataCreateCaptchaChallenge": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/CreateCaptchaChallengeDto"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "CaptchaChallenge": {
+        "type": "object",
+        "properties": {
+          "captchaID": {
+            "type": "string",
+            "nullable": false
+          },
+          "imageDataSvg": {
+            "type": "string",
+            "nullable": false,
+            "description": "SVG url encoded"
+          }
+        },
+        "required": [
+          "captchaID",
+          "imageDataSvg"
+        ]
+      },
+      "DataCaptchaChallengeRes": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/CaptchaChallenge"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "VerifyCaptchaChallengeDto": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "nullable": false,
+            "minLength": 4,
+            "maxLength": 8
+          }
+        },
+        "required": [
+          "text"
+        ]
+      },
+      "DataVerifyCaptchaChallenge": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/VerifyCaptchaChallengeDto"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "DataCaptchaVerificationRes": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "boolean",
+            "nullable": false
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "NotFound": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "number",
+            "enum": [
+              404
+            ]
+          },
+          "message": {
+            "type": "string",
+            "description": "Risorsa non trovata",
+            "example": "Risorsa non trovata"
+          }
+        },
+        "required": [
+          "statusCode",
+          "message"
+        ]
+      }
+    }
+  }
+}
