@@ -21,20 +21,17 @@ The entry, then, is removed from the database to mitigate brute force attacks, i
 As `.env` file ignored, run the following command to create a new one with variables to test this service in Docker within a docker network.
 
 If you want to test it into another context, feel free to edit the variable that is pointing to Redis host.
+
+Cat environment variables into `.env` file
+
 ```shell
-# cat environment variables into .env file
 cat > .env << EOF
-# CONFIG
 NODE_CONFIG_DIR="src/config"
-# ENVIRONMENT
 NODE_ENV="dev"
-# SERVER
 SERVER_PORT="8080"
 SERVER_URL="http://127.0.0.1:8080"
-# PARAMS
 CAPTCHA_CONFIG_MIN_SIZE="4"
 CAPTCHA_CONFIG_MAX_SIZE="8"
-# REDIS
 REDIS_HOST="redis-captcha"
 REDIS_PORT="6379"
 REDIS_TTL="10"
@@ -42,26 +39,34 @@ EOF
 ```
 
 ## Docker
-```shell
-# create docker network
-docker network create captcha
 
-# run redis container
+Create docker network
+
+```shell
+docker network create captcha
+```
+
+Run redis container.
+The binding port is just for the purpose of the exercise if you want to look inside the database, anyway you can omit the arguments `-p` if you don't need it
+```shell
 docker run -d \
   --name redis-captcha \
   --network=captcha \
   -p 6379:6379 \
   redis:7.2.3
-# the binding port is just for the purpose of the exercise if you want to look inside the database
-# anyway you can omit the arguments -p if you don't need it
+```
 
-# build microservice image
+Build microservice image
+
+```shell
 docker build \
   -t api-captcha:0.0.1-beta1 \
   -f Dockerfile \
   .
+```
+Run microservice container
 
-# run microservice container
+```shell
 docker run -d \
   --name api-captcha \
   --network=captcha \
@@ -72,9 +77,9 @@ docker run -d \
 ## HTTP call
 Feel free to use any http client to test endpoints.
 
-Make a call to `http://localhost:3000/api/v1/captcha` with method `POST` as documentation to create a captcha challenge.
+Make a call to `http://localhost:8080/api/v1/captcha` with method `POST` as documentation to create a captcha challenge.
 
 Look into console to get the verification text generated (this is just for purpose of the exercise).
 
-Make a call to `http://localhost:3000/api/v1/captcha/:captchaID` with method `PUT` as documentation to verify a captcha challenge.
+Make a call to `http://localhost:8080/api/v1/captcha/:captchaID` with method `PUT` as documentation to verify a captcha challenge.
 
