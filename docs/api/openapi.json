@@ -130,7 +130,7 @@
   "info": {
     "title": "api-captcha",
     "description": "",
-    "version": "0.0.1-beta1",
+    "version": "0.0.1-beta.0",
     "contact": {}
   },
   "tags": [],
@@ -148,7 +148,7 @@
             "type": "string",
             "nullable": false,
             "description": "API version",
-            "example": "0.0.1-beta1"
+            "example": "0.0.1-beta.0"
           }
         },
         "required": [
